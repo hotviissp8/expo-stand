@@ -1,4 +1,4 @@
-import { createDefaultConfig } from './defaults';
+import { builtinConfig } from './defaults';
 import type { StandConfig } from './types';
 
 /** Сохранённый конфиг как был, до наложения дефолтов: только поля, нужные миграциям. */
@@ -19,7 +19,7 @@ const MIGRATIONS: Migration[] = [
   {
     version: 3,
     apply(config, saved) {
-      const d = createDefaultConfig();
+      const d = builtinConfig();
       if (d.materials.length) config.materials = [...d.materials];
       const m = config.main;
       m.fontSize = d.main.fontSize;

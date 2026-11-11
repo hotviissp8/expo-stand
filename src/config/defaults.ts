@@ -1,7 +1,11 @@
 import { MATERIALS } from '../data/materials';
+import { mergeConfig } from './merge';
+import { migrate, type Saved } from './migrations';
+import PRESET from './preset.json';
 import type { PhraseConfig, StandConfig } from './types';
+import { CONFIG_VERSION } from './version';
 
-export const CONFIG_VERSION = 5;
+export { CONFIG_VERSION };
 
 /** Встроенный шрифт (пакет @fontsource/inter, все начертания 100–900). */
 export const DEFAULT_FONT_FAMILY = 'Inter';
@@ -14,6 +18,7 @@ export const WEIGHT_NAMES: Record<number, string> = {
 };
 
 export const STORAGE_KEY = 'expo-stand.config';
+export const PANEL_MODE_KEY = 'expo-stand.panelMode';
 export const ASSET_DB = 'expo-stand';
 
 /** Настройки логотипа одной полосы */
@@ -36,7 +41,16 @@ export function newPhrase(row: number): PhraseConfig {
   };
 }
 
+/**
+ * Настройки по умолчанию = preset.json (сохранённый конфиг стенда) поверх встроенных значений.
+ * Чтобы обновить дефолты, замените preset.json файлом из «Сохранить».
+ */
 export function createDefaultConfig(): StandConfig {
+  return migrate(mergeConfig(builtinConfig(), PRESET), PRESET as Saved);
+}
+
+/** Встроенные значения: запасные для полей, которых нет в preset.json. */
+export function builtinConfig(): StandConfig {
   return {
     version: CONFIG_VERSION,
     stand: {
@@ -72,6 +86,7 @@ export function createDefaultConfig(): StandConfig {
       minGap: 45,
       justify: true,
       justifyPhrases: false,
+      phraseTracking: 0,
       fillGaps: true,
       shuffle: true,
       seed: 7,

@@ -1,7 +1,13 @@
 import { Db } from './Db';
+import { PublicFiles } from './PublicFiles';
 
 export type AssetKey = 'photo' | 'logo' | 'logoLeft' | 'logoFront' | 'photoLogo';
 export const ASSET_KEYS: AssetKey[] = ['photo', 'logo', 'logoLeft', 'logoFront', 'photoLogo'];
+
+/** Манифест файлов по умолчанию: public/defaults/assets.json, { "photo": "photo.jpg", ... } */
+const DEFAULTS_DIR = 'defaults/';
+const DEFAULTS_MANIFEST = `${DEFAULTS_DIR}assets.json`;
+const DEFAULT_SUFFIX = ' (по умолчанию)';
 
 export interface LoadedImage {
   name: string;
@@ -17,7 +23,10 @@ interface StoredAsset {
 
 type Listener = (key: AssetKey) => void;
 
-/** Картинки, выбранные с ПК (фото, логотипы). Живут в IndexedDB между перезапусками. */
+/**
+ * Картинки, выбранные с ПК (фото, логотипы). Живут в IndexedDB между перезапусками.
+ * Если своего файла нет — берётся файл по умолчанию из public/defaults (если он там лежит).
+ */
 export class AssetStore {
   private images = new Map<AssetKey, LoadedImage>();
   private listeners = new Set<Listener>();
@@ -36,8 +45,9 @@ export class AssetStore {
   }
 
   async restore(): Promise<void> {
+    const manifest = await PublicFiles.json<Partial<Record<AssetKey, string>>>(DEFAULTS_MANIFEST);
     for (const key of ASSET_KEYS) {
-      const stored = await Db.get<StoredAsset>('assets', key);
+      const stored = (await Db.get<StoredAsset>('assets', key)) ?? (await AssetStore.fallback(manifest?.[key]));
       if (stored) await this.apply(key, stored).catch((e) => console.error(key, e));
     }
   }
@@ -53,6 +63,12 @@ export class AssetStore {
     this.images.delete(key);
     await Db.delete('assets', key);
     this.listeners.forEach((l) => l(key));
+  }
+
+  private static async fallback(file: string | undefined): Promise<StoredAsset | null> {
+    if (!file) return null;
+    const blob = await PublicFiles.blob(DEFAULTS_DIR + file);
+    return blob ? { name: file + DEFAULT_SUFFIX, blob } : null;
   }
 
   private async apply(key: AssetKey, stored: StoredAsset): Promise<void> {

@@ -3,7 +3,13 @@ import type { ConfigStore } from '../state/ConfigStore';
 import { Controls } from './Controls';
 import type { FontOptions } from './FontOptions';
 
-/** Список фраз главной стены: добавить, дублировать, удалить, поля каждой фразы. */
+/** Текст фразы без разметки — подпись карточки в простом режиме. */
+const plain = (text: string) => text.replace(/\*\*|==|__/g, '');
+
+/**
+ * Список фраз главной стены: добавить, дублировать, удалить, поля каждой фразы.
+ * simple — только положение (строка, X, ширина) у включённых фраз, без добавления и удаления.
+ */
 export class PhrasesEditor {
   readonly el = Controls.el('div', 'phrases');
   private list = Controls.el('div', 'phrases-list');
@@ -13,7 +19,12 @@ export class PhrasesEditor {
     private readonly store: ConfigStore,
     private readonly controls: Controls,
     private readonly fonts: FontOptions,
+    private readonly simple = false,
   ) {
+    if (simple) {
+      this.el.append(this.list);
+      return;
+    }
     const add = Controls.button('+ Фраза', () => {
       const phrases = this.store.value.main.phrases;
       const lastRow = phrases.reduce((max, p) => Math.max(max, p.row), 0);
@@ -35,6 +46,17 @@ export class PhrasesEditor {
     this.store.value.main.phrases.forEach((phrase, i) => {
       const base = `main.phrases.${i}`;
       const card = Controls.el('div', 'phrase');
+      const position = [
+        this.controls.number(`${base}.row`, 'Строка', { min: 1, step: 1 }),
+        this.controls.number(`${base}.x`, 'X, мм', { min: 0, max: this.store.value.stand.mainWidth, step: 5, slider: true }),
+        this.controls.number(`${base}.width`, 'Ширина, мм', { min: 100, max: this.store.value.stand.mainWidth, step: 5, slider: true }),
+      ];
+      if (this.simple) {
+        if (!phrase.enabled) return;
+        card.append(Controls.el('div', 'phrase-preview', plain(phrase.text)), ...position);
+        this.list.append(card);
+        return;
+      }
       const head = Controls.el('div', 'phrase-head');
       head.append(
         Controls.el('span', 'phrase-title', `${i + 1}`),
@@ -51,9 +73,7 @@ export class PhrasesEditor {
       card.append(
         head,
         this.controls.textarea(`${base}.text`, '**жирный** ==выделенный== __курсив__', 2),
-        this.controls.number(`${base}.row`, 'Строка', { min: 1, step: 1 }),
-        this.controls.number(`${base}.x`, 'X, мм', { min: 0, max: this.store.value.stand.mainWidth, step: 5, slider: true }),
-        this.controls.number(`${base}.width`, 'Ширина, мм', { min: 100, max: this.store.value.stand.mainWidth, step: 5, slider: true }),
+        ...position,
         this.controls.select(`${base}.justify`, 'Растянуть по ширине', [
           { value: 'auto', label: 'как общая настройка' },
           { value: 'on', label: 'да' },

@@ -1,7 +1,8 @@
 import type { GradientConfig } from '../config/types';
 import type { GradientStop, LinearPaint } from '../draw/ops';
+import { SoftCurve } from './SoftCurve';
 
-const STOPS = 40;
+const STOPS = 64;
 
 const parse = (hex: string): [number, number, number] => {
   const v = parseInt(hex.replace('#', '').padEnd(6, '0').slice(0, 6), 16);
@@ -18,12 +19,7 @@ export class Gradient {
       case 'easeIn': return Math.pow(t, p);
       case 'easeOut': return 1 - Math.pow(1 - t, p);
       case 'smooth': return t < 0.5 ? Math.pow(2 * t, p) / 2 : 1 - Math.pow(2 * (1 - t), p) / 2;
-      case 'soft': {
-        // Медленный старт (t³) и длинный хвост у конца: без резкого «входа в белый»
-        const quintic = t * t * t * (t * (t * 6 - 15) + 10);
-        const cubic = t * t * (3 - 2 * t);
-        return quintic * (1 - t) + cubic * t;
-      }
+      case 'soft': return SoftCurve.at(t, p);
       default: return t;
     }
   }

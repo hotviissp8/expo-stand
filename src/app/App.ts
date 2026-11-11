@@ -1,4 +1,5 @@
 import type { StandConfig } from '../config/types';
+import { BundledFonts } from '../fonts/BundledFonts';
 import { FontLibrary } from '../fonts/FontLibrary';
 import { AssetStore } from '../state/AssetStore';
 import { ConfigStore, type ConfigChange } from '../state/ConfigStore';
@@ -37,6 +38,7 @@ export class App {
     await Promise.all([
       this.assets.restore().catch((e) => console.error('assets', e)),
       this.library.restore().catch((e) => console.error('fonts', e)),
+      BundledFonts.load().catch((e) => console.error('bundled fonts', e)),
     ]);
 
     this.panel = new Panel(this.store, this.assets, this.library, {
@@ -49,7 +51,7 @@ export class App {
       surfaces: () => this.surfaces.all.map((s) => ({ id: s.id, title: s.title, info: s.info })),
     });
     this.surfaces.onInfo(() => this.panel.updateInfo());
-    this.root.append(this.panel.el, this.panel.toggleButton, this.status);
+    this.root.append(this.panel.el, this.panel.topbar, this.status);
 
     this.store.subscribe((change) => this.onConfig(change));
     this.assets.subscribe((key) => this.surfaces.invalidateAsset(key));

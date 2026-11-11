@@ -1,4 +1,5 @@
-import { CONFIG_VERSION, STORAGE_KEY, createDefaultConfig } from '../config/defaults';
+import { STORAGE_KEY, createDefaultConfig } from '../config/defaults';
+import { mergeConfig } from '../config/merge';
 import { migrate, type Saved } from '../config/migrations';
 import type { ConfigSection, StandConfig } from '../config/types';
 
@@ -84,21 +85,6 @@ export class ConfigStore {
 
   /** Сохранённый конфиг любой версии → текущий: дефолты для новых полей + миграции. */
   static upgrade(saved: unknown): StandConfig {
-    return migrate(ConfigStore.merge(createDefaultConfig(), saved), (saved && typeof saved === 'object' ? saved : {}) as Saved);
-  }
-
-  /** Накладывает сохранённое на значения по умолчанию: новые поля получают дефолт. */
-  static merge<T>(base: T, saved: unknown): T {
-    if (saved === undefined || saved === null) return base;
-    if (Array.isArray(base)) return (Array.isArray(saved) ? saved : base) as T;
-    if (typeof base === 'object' && base !== null) {
-      if (typeof saved !== 'object') return base;
-      const out: Record<string, unknown> = { ...(base as Record<string, unknown>) };
-      for (const key of Object.keys(out)) out[key] = ConfigStore.merge(out[key], (saved as Record<string, unknown>)[key]);
-      out.version = CONFIG_VERSION;
-      if (!('version' in (base as object))) delete out.version;
-      return out as T;
-    }
-    return (typeof saved === typeof base ? saved : base) as T;
+    return migrate(mergeConfig(createDefaultConfig(), saved), (saved && typeof saved === 'object' ? saved : {}) as Saved);
   }
 }

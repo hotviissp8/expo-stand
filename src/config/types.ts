@@ -85,6 +85,8 @@ export interface MainWallConfig {
   justify: boolean;
   /** Растягивать фразы по их ширине (у каждой можно переопределить) */
   justifyPhrases: boolean;
+  /** Трекинг всех фраз (1/1000 кегля), складывается с трекингом фразы */
+  phraseTracking: number;
   /** Пустоту перед фразой забивать подходящим по ширине материалом */
   fillGaps: boolean;
   shuffle: boolean;
