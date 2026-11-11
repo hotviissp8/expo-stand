@@ -61,6 +61,8 @@ export interface ImageOp {
   source: CanvasImageSource;
   href: string | (() => string);
   opacity: number;
+  /** Закрасить цветом: файл служит маской по прозрачности */
+  tint?: string;
 }
 
 export type DrawOp = RectOp | TextOp | ImageOp;

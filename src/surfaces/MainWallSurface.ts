@@ -108,7 +108,9 @@ export class MainWallSurface extends Surface {
         phrase.width,
         measurer,
       );
-      lines.forEach((line, k) => {
+      const stretch = phrase.justify === 'on' || (phrase.justify !== 'off' && m.justifyPhrases);
+      lines.forEach((source, k) => {
+        const line = stretch ? RichText.justify(source, phrase.width) : source;
         const row = phrase.row - 1 + k;
         if (row < 0 || row >= rows) return;
         const list = map.get(row) ?? [];

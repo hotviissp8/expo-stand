@@ -1,7 +1,7 @@
 import { Db } from './Db';
 
-export type AssetKey = 'photo' | 'logo' | 'logoLeft' | 'logoFront';
-export const ASSET_KEYS: AssetKey[] = ['photo', 'logo', 'logoLeft', 'logoFront'];
+export type AssetKey = 'photo' | 'logo' | 'logoLeft' | 'logoFront' | 'photoLogo';
+export const ASSET_KEYS: AssetKey[] = ['photo', 'logo', 'logoLeft', 'logoFront', 'photoLogo'];
 
 export interface LoadedImage {
   name: string;

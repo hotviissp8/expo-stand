@@ -29,11 +29,15 @@ export interface PlacedRun {
   width: number;
   font: FontSpec;
   color: string;
+  /** Номер слова в строке — между словами растягивается пробел */
+  word: number;
 }
 
 export interface RichLine {
   runs: PlacedRun[];
   width: number;
+  /** Последняя строка абзаца (конец текста или принудительный перенос) — не растягивается */
+  last: boolean;
 }
 
 /** Разметка фраз: **жирный**, ==выделенный==, __курсив__. */
@@ -90,24 +94,37 @@ export class RichText {
     const spaceFont = RichText.font(theme, { bold: false, accent: false, italic: false });
     const space = measurer.width(' ', spaceFont);
     const lines: RichLine[] = [];
-    let line: RichLine = { runs: [], width: 0 };
+    const empty = (): RichLine => ({ runs: [], width: 0, last: false });
+    let line = empty();
+    let wordIndex = 0;
     for (const word of words) {
       const wordWidth = word.parts.reduce((sum, p) => sum + measurer.width(p.text, RichText.font(theme, p)), 0);
       const needsSpace = line.runs.length > 0;
       if ((word.breakBefore && line.runs.length) || (needsSpace && line.width + space + wordWidth > maxWidth)) {
+        line.last = word.breakBefore;
         lines.push(line);
-        line = { runs: [], width: 0 };
+        line = empty();
+        wordIndex = 0;
       }
       let dx = line.runs.length ? line.width + space : 0;
       for (const part of word.parts) {
         const font = RichText.font(theme, part);
         const width = measurer.width(part.text, font);
-        line.runs.push({ text: part.text, dx, width, font, color: part.accent ? theme.accent : theme.color });
+        line.runs.push({ text: part.text, dx, width, font, color: part.accent ? theme.accent : theme.color, word: wordIndex });
         dx += width;
       }
       line.width = dx;
+      wordIndex++;
     }
-    if (line.runs.length) lines.push(line);
+    if (line.runs.length) lines.push({ ...line, last: true });
     return lines;
+  }
+
+  /** Растягивает промежутки между словами так, чтобы строка заняла ровно width; последнюю строку и однословные не трогает. */
+  static justify(line: RichLine, width: number): RichLine {
+    const gaps = line.runs.reduce((max, r) => Math.max(max, r.word), 0);
+    if (line.last || gaps === 0 || width <= line.width) return line;
+    const extra = (width - line.width) / gaps;
+    return { ...line, width, runs: line.runs.map((r) => ({ ...r, dx: r.dx + extra * r.word })) };
   }
 }

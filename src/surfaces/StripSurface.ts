@@ -67,7 +67,7 @@ export class StripSurface extends Surface {
       const h = s.logoHeight;
       const w = h * (logo.element.naturalWidth / Math.max(1, logo.element.naturalHeight));
       const y = Surface.alignTop(s.logoAlign, s.logoOffset, h, height);
-      ops.push({ t: 'image', x: width - s.padRight - w, y, w, h, source: logo.element, href: logo.dataUrl, opacity: 1 });
+      ops.push({ t: 'image', x: width - s.padRight - w, y, w, h, source: logo.element, href: logo.dataUrl, opacity: 1, tint: this.text(config).logoTint ? this.text(config).logoColor : undefined });
     }
     this.info = `${width} × ${height}`;
     return { width, height, ops };

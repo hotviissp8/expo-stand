@@ -1,5 +1,5 @@
 import { Gradient } from '../layout/Gradient';
-import { fontCss, type DrawList, type Paint } from './ops';
+import { fontCss, type DrawList, type ImageOp, type Paint } from './ops';
 
 /** Пределы canvas в Chromium. */
 export const CANVAS_MAX_SIDE = 32767;
@@ -56,10 +56,23 @@ export class CanvasPainter {
         ctx.fillText(op.text, op.x, op.y);
       } else {
         ctx.globalAlpha = op.opacity;
-        ctx.drawImage(op.source, op.x, op.y, op.w, op.h);
+        ctx.drawImage(op.tint ? this.tinted(op, w / list.width, h / list.height) : op.source, op.x, op.y, op.w, op.h);
         ctx.globalAlpha = 1;
       }
     }
+  }
+
+  /** Картинка op, закрашенная op.tint с сохранением прозрачности, в разрешении холста. */
+  private tinted(op: ImageOp, kx: number, ky: number): HTMLCanvasElement {
+    const layer = document.createElement('canvas');
+    layer.width = Math.max(1, Math.round(op.w * kx));
+    layer.height = Math.max(1, Math.round(op.h * ky));
+    const ctx = layer.getContext('2d')!;
+    ctx.drawImage(op.source, 0, 0, layer.width, layer.height);
+    ctx.globalCompositeOperation = 'source-in';
+    ctx.fillStyle = op.tint!;
+    ctx.fillRect(0, 0, layer.width, layer.height);
+    return layer;
   }
 
   private makeStyle(ctx: CanvasRenderingContext2D, paint: Paint): string | CanvasGradient | CanvasPattern {

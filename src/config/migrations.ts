@@ -32,6 +32,14 @@ const MIGRATIONS: Migration[] = [
       config.mosaic.scatter.enabled = false;
     },
   },
+  {
+    version: 4,
+    apply(config) {
+      // Линейный переход даёт видимый излом на концах — главная стена переходит на мягкую кривую.
+      for (const g of [config.main.gradient, config.main.textGradient]) if (g.curve === 'linear') g.curve = 'soft';
+      for (const phrase of config.main.phrases) phrase.justify ??= 'auto';
+    },
+  },
 ];
 
 export function migrate(config: StandConfig, saved: Saved): StandConfig {

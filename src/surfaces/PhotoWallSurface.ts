@@ -19,7 +19,7 @@ export class PhotoWallSurface extends Surface {
   readonly id = 'photo' as const;
   readonly title = 'Фото-стена';
   readonly sections: ConfigSection[] = ['mosaic', 'materials'];
-  readonly assets: AssetKey[] = ['photo'];
+  readonly assets: AssetKey[] = ['photo', 'photoLogo'];
   private processor = new PhotoProcessor();
   private layer = new PhotoLayer();
 
@@ -124,6 +124,16 @@ export class PhotoWallSurface extends Surface {
       ops.push({ t: 'image', x: 0, y: 0, w: width, h: height, source: layer.canvas, href: () => layer.canvas.toDataURL('image/png'), opacity: 1 });
     }
     if (fade) ops.push({ t: 'rect', x: 0, y: 0, w: width, h: height, fill: Gradient.fade('corner', fade, config.stand.cornerColor, 1, 0) });
+
+    const logo = m.overlay.enabled ? assets.image('photoLogo') : null;
+    if (logo) {
+      const h = m.overlay.height;
+      const w = h * (logo.element.naturalWidth / Math.max(1, logo.element.naturalHeight));
+      ops.push({
+        t: 'image', x: m.overlay.x - w / 2, y: m.overlay.y - h / 2, w, h,
+        source: logo.element, href: logo.dataUrl, opacity: m.overlay.opacity, tint: m.overlay.tint ? m.overlay.color : undefined,
+      });
+    }
 
     this.info = `строк: ${rows}, знаков: ${glyphs}` + (dropped ? `, убрано: ${dropped}` : '');
     return { width, height, ops };

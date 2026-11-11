@@ -40,8 +40,17 @@ export class SvgPainter {
         );
       } else {
         const href = typeof op.href === 'function' ? op.href() : op.href;
+        let filter = '';
+        if (op.tint) {
+          const id = `tint-${defs.length}`;
+          defs.push(
+            `<filter id="${id}" x="0" y="0" width="1" height="1" color-interpolation-filters="sRGB">` +
+              `<feFlood flood-color="${op.tint}" result="c"/><feComposite in="c" in2="SourceAlpha" operator="in"/></filter>`,
+          );
+          filter = ` filter="url(#${id})"`;
+        }
         body.push(
-          `<image x="${num(op.x)}" y="${num(op.y)}" width="${num(op.w)}" height="${num(op.h)}" opacity="${op.opacity}" preserveAspectRatio="none" href="${href}"/>`,
+          `<image x="${num(op.x)}" y="${num(op.y)}" width="${num(op.w)}" height="${num(op.h)}" opacity="${op.opacity}" preserveAspectRatio="none"${filter} href="${href}"/>`,
         );
       }
     }

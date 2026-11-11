@@ -54,6 +54,11 @@ export class PhrasesEditor {
         this.controls.number(`${base}.row`, 'Строка', { min: 1, step: 1 }),
         this.controls.number(`${base}.x`, 'X, мм', { min: 0, max: this.store.value.stand.mainWidth, step: 5, slider: true }),
         this.controls.number(`${base}.width`, 'Ширина, мм', { min: 100, max: this.store.value.stand.mainWidth, step: 5, slider: true }),
+        this.controls.select(`${base}.justify`, 'Растянуть по ширине', [
+          { value: 'auto', label: 'как общая настройка' },
+          { value: 'on', label: 'да' },
+          { value: 'off', label: 'нет' },
+        ]),
         this.controls.color(`${base}.color`, 'Цвет'),
         this.controls.color(`${base}.accent`, 'Выделение'),
         this.controls.select(`${base}.weight`, 'Начертание', this.fonts.weights('main.family'), true),

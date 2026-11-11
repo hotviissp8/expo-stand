@@ -1,7 +1,7 @@
 import { MATERIALS } from '../data/materials';
 import type { PhraseConfig, StandConfig } from './types';
 
-export const CONFIG_VERSION = 3;
+export const CONFIG_VERSION = 4;
 
 /** Встроенный шрифт (пакет @fontsource/inter, все начертания 100–900). */
 export const DEFAULT_FONT_FAMILY = 'Inter';
@@ -28,6 +28,7 @@ export function newPhrase(row: number): PhraseConfig {
     accent: '#ffffff',
     weight: 400,
     boldWeight: 700,
+    justify: 'auto',
   };
 }
 
@@ -66,13 +67,14 @@ export function createDefaultConfig(): StandConfig {
       ragged: 300,
       minGap: 45,
       justify: true,
+      justifyPhrases: false,
       fillGaps: true,
       shuffle: true,
       seed: 7,
       phraseFlow: 'fixed',
-      gradient: { start: 4000, end: 5000, curve: 'linear', power: 1 },
+      gradient: { start: 4000, end: 5000, curve: 'soft', power: 1 },
       textGradientLinked: true,
-      textGradient: { start: 4000, end: 5000, curve: 'linear', power: 1 },
+      textGradient: { start: 4000, end: 5000, curve: 'soft', power: 1 },
       textInverse: '#e2e2e2',
       dotInverse: '#e2e2e2',
       phrases: [],
@@ -116,6 +118,7 @@ export function createDefaultConfig(): StandConfig {
         unit: 'name',
         seed: 11,
       },
+      overlay: { enabled: true, x: 1500, y: 1250, height: 400, tint: false, color: '#ffffff', opacity: 1 },
     },
     strips: {
       family: '',
@@ -135,8 +138,8 @@ export function createDefaultConfig(): StandConfig {
       separateLogos: false,
       innerContent: false,
       innerBackground: '#111111',
-      left: { text: '' },
-      front: { text: '' },
+      left: { text: '', logoTint: false, logoColor: '#ffffff' },
+      front: { text: '', logoTint: false, logoColor: '#ffffff' },
     },
     view: {
       pxPerMm: 1.6,

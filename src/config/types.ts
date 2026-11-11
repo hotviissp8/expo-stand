@@ -1,5 +1,8 @@
 /** Все размеры в миллиметрах, цвета — CSS hex. */
 
+/** auto — как общая настройка «Растягивать фразы» */
+export type PhraseJustify = 'auto' | 'on' | 'off';
+
 export interface PhraseConfig {
   id: string;
   enabled: boolean;
@@ -15,6 +18,8 @@ export interface PhraseConfig {
   accent: string;
   weight: number;
   boldWeight: number;
+  /** Растянуть строки фразы по её ширине (кроме последней строки абзаца) */
+  justify: PhraseJustify;
 }
 
 export interface StandGeometry {
@@ -36,7 +41,8 @@ export interface FontConfig {
   family: string;
 }
 
-export type GradientCurve = 'linear' | 'easeIn' | 'easeOut' | 'smooth';
+/** soft — S-образно с нулевым наклоном на концах (без видимого начала и конца), крутизна не влияет */
+export type GradientCurve = 'linear' | 'easeIn' | 'easeOut' | 'smooth' | 'soft';
 
 export interface GradientConfig {
   start: number;
@@ -75,6 +81,8 @@ export interface MainWallConfig {
   ragged: number;
   minGap: number;
   justify: boolean;
+  /** Растягивать фразы по их ширине (у каждой можно переопределить) */
+  justifyPhrases: boolean;
   /** Пустоту перед фразой забивать подходящим по ширине материалом */
   fillGaps: boolean;
   shuffle: boolean;
@@ -122,6 +130,7 @@ export interface MosaicConfig {
   /** Размер «пикселя» фото, мм; 0 — фото как есть */
   pixelSize: number;
   scatter: ScatterConfig;
+  overlay: LogoOverlayConfig;
 }
 
 export type ScatterAxis = 'x' | 'y' | 'xy';
@@ -147,10 +156,26 @@ export interface ScatterConfig {
   seed: number;
 }
 
+/** Логотип поверх всей поверхности: положение центра и высота в мм, цвет поверх файла (файл = маска). */
+export interface LogoOverlayConfig {
+  enabled: boolean;
+  /** Центр, мм от левого края */
+  x: number;
+  /** Центр, мм от верха */
+  y: number;
+  height: number;
+  tint: boolean;
+  color: string;
+  opacity: number;
+}
+
 export type VAlign = 'top' | 'center' | 'bottom';
 
 export interface StripText {
   text: string;
+  /** Закрасить логотип этой полосы цветом (файл служит маской по прозрачности) */
+  logoTint: boolean;
+  logoColor: string;
 }
 
 export interface StripsConfig {
