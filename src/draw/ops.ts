@@ -6,6 +6,8 @@ export interface FontSpec {
   /** Кегль в мм */
   size: number;
   italic?: boolean;
+  /** Трекинг: 1/1000 кегля между символами */
+  tracking?: number;
 }
 
 /** [доля 0..1, цвет, непрозрачность 0..1 (по умолчанию 1)] */
@@ -71,6 +73,11 @@ export interface DrawList {
   width: number;
   height: number;
   ops: DrawOp[];
+}
+
+/** Добавка между символами, мм */
+export function letterSpacing(font: FontSpec): number {
+  return ((font.tracking ?? 0) * font.size) / 1000;
 }
 
 export function fontCss(font: FontSpec, scale = 1): string {

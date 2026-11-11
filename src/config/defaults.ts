@@ -1,7 +1,7 @@
 import { MATERIALS } from '../data/materials';
 import type { PhraseConfig, StandConfig } from './types';
 
-export const CONFIG_VERSION = 4;
+export const CONFIG_VERSION = 5;
 
 /** Встроенный шрифт (пакет @fontsource/inter, все начертания 100–900). */
 export const DEFAULT_FONT_FAMILY = 'Inter';
@@ -16,6 +16,9 @@ export const WEIGHT_NAMES: Record<number, string> = {
 export const STORAGE_KEY = 'expo-stand.config';
 export const ASSET_DB = 'expo-stand';
 
+/** Настройки логотипа одной полосы */
+const STRIP_LOGO = { logoHeight: 200, logoPadRight: 60, logoAlign: 'center' as const, logoOffset: 0, logoTint: false, logoColor: '#ffffff' };
+
 export function newPhrase(row: number): PhraseConfig {
   return {
     id: Math.random().toString(36).slice(2, 10),
@@ -29,6 +32,7 @@ export function newPhrase(row: number): PhraseConfig {
     weight: 400,
     boldWeight: 700,
     justify: 'auto',
+    tracking: 0,
   };
 }
 
@@ -131,15 +135,11 @@ export function createDefaultConfig(): StandConfig {
       padLeft: 60,
       textAlign: 'center',
       textOffset: 0,
-      logoHeight: 200,
-      padRight: 60,
-      logoAlign: 'center',
-      logoOffset: 0,
       separateLogos: false,
       innerContent: false,
       innerBackground: '#111111',
-      left: { text: '', logoTint: false, logoColor: '#ffffff' },
-      front: { text: '', logoTint: false, logoColor: '#ffffff' },
+      left: { text: '', ...STRIP_LOGO },
+      front: { text: '', ...STRIP_LOGO },
     },
     view: {
       pxPerMm: 1.6,

@@ -59,6 +59,7 @@ export class PhrasesEditor {
           { value: 'on', label: 'да' },
           { value: 'off', label: 'нет' },
         ]),
+        this.controls.number(`${base}.tracking`, 'Трекинг (1/1000 кегля)', { min: -200, max: 1000, step: 5, slider: true }),
         this.controls.color(`${base}.color`, 'Цвет'),
         this.controls.color(`${base}.accent`, 'Выделение'),
         this.controls.select(`${base}.weight`, 'Начертание', this.fonts.weights('main.family'), true),

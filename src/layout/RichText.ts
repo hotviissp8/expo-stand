@@ -20,6 +20,8 @@ export interface RichTheme {
   boldWeight: number;
   color: string;
   accent: string;
+  /** Трекинг: 1/1000 кегля */
+  tracking?: number;
 }
 
 export interface PlacedRun {
@@ -67,7 +69,7 @@ export class RichText {
   }
 
   static font(theme: RichTheme, style: RichStyle): FontSpec {
-    return { family: theme.family, size: style.bold ? (theme.boldSize ?? theme.size) : theme.size, weight: style.bold ? theme.boldWeight : theme.weight, italic: style.italic };
+    return { family: theme.family, size: style.bold ? (theme.boldSize ?? theme.size) : theme.size, weight: style.bold ? theme.boldWeight : theme.weight, italic: style.italic, tracking: theme.tracking };
   }
 
   /** Переносит по словам в заданную ширину; переводы строки в тексте — принудительные. */

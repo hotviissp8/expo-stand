@@ -104,7 +104,7 @@ export class MainWallSurface extends Surface {
       if (!phrase.enabled || !phrase.text.trim()) continue;
       const lines = RichText.wrap(
         phrase.text,
-        { family, size: m.fontSize, boldSize: m.boldSize, weight: phrase.weight, boldWeight: phrase.boldWeight, color: phrase.color, accent: phrase.accent },
+        { family, size: m.fontSize, boldSize: m.boldSize, weight: phrase.weight, boldWeight: phrase.boldWeight, color: phrase.color, accent: phrase.accent, tracking: phrase.tracking },
         phrase.width,
         measurer,
       );

@@ -64,10 +64,11 @@ export class StripSurface extends Surface {
 
     const logo = this.logo(ctx);
     if (logo) {
-      const h = s.logoHeight;
+      const own = this.text(config);
+      const h = own.logoHeight;
       const w = h * (logo.element.naturalWidth / Math.max(1, logo.element.naturalHeight));
-      const y = Surface.alignTop(s.logoAlign, s.logoOffset, h, height);
-      ops.push({ t: 'image', x: width - s.padRight - w, y, w, h, source: logo.element, href: logo.dataUrl, opacity: 1, tint: this.text(config).logoTint ? this.text(config).logoColor : undefined });
+      const y = Surface.alignTop(own.logoAlign, own.logoOffset, h, height);
+      ops.push({ t: 'image', x: width - own.logoPadRight - w, y, w, h, source: logo.element, href: logo.dataUrl, opacity: 1, tint: own.logoTint ? own.logoColor : undefined });
     }
     this.info = `${width} × ${height}`;
     return { width, height, ops };

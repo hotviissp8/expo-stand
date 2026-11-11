@@ -1,4 +1,4 @@
-import { fontCss, type FontSpec } from '../draw/ops';
+import { fontCss, letterSpacing, type FontSpec } from '../draw/ops';
 
 const REF_SIZE = 100;
 
@@ -29,7 +29,7 @@ export class TextMeasurer {
   }
 
   width(text: string, font: FontSpec): number {
-    return (this.metrics(text, font).width * font.size) / REF_SIZE;
+    return (this.metrics(text, font).width * font.size) / REF_SIZE + [...text].length * letterSpacing(font);
   }
 
   inkCenter(text: string, font: FontSpec): number {

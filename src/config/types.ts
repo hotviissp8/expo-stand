@@ -20,6 +20,8 @@ export interface PhraseConfig {
   boldWeight: number;
   /** Растянуть строки фразы по её ширине (кроме последней строки абзаца) */
   justify: PhraseJustify;
+  /** Трекинг, как в Photoshop: 1/1000 кегля между символами (отрицательный — сжать) */
+  tracking: number;
 }
 
 export interface StandGeometry {
@@ -173,6 +175,12 @@ export type VAlign = 'top' | 'center' | 'bottom';
 
 export interface StripText {
   text: string;
+  /** Высота логотипа, мм (масштаб) */
+  logoHeight: number;
+  /** Отступ логотипа от правого края полосы, мм */
+  logoPadRight: number;
+  logoAlign: VAlign;
+  logoOffset: number;
   /** Закрасить логотип этой полосы цветом (файл служит маской по прозрачности) */
   logoTint: boolean;
   logoColor: string;
@@ -190,10 +198,6 @@ export interface StripsConfig {
   textAlign: VAlign;
   /** От выбранного края (для центра — сдвиг вниз), мм */
   textOffset: number;
-  logoHeight: number;
-  padRight: number;
-  logoAlign: VAlign;
-  logoOffset: number;
   /** Свой логотип у каждой полосы */
   separateLogos: boolean;
   innerContent: boolean;

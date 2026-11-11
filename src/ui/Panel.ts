@@ -117,6 +117,26 @@ export class Panel {
     ];
   }
 
+  /** Поля логотипа одной полосы: файл, масштаб, положение, цвет. */
+  private stripLogo(side: 'left' | 'front', title: string, stripH: number): HTMLElement[] {
+    const c = this.controls;
+    const base = `strips.${side}`;
+    return [
+      Controls.el('div', 'subsection-title', title),
+      this.picker(side === 'left' ? 'logoLeft' : 'logoFront', 'Свой файл', 'image/*'),
+      c.number(`${base}.logoHeight`, 'Высота (масштаб), мм', { min: 10, max: 600, step: 1, slider: true }),
+      c.select(`${base}.logoAlign`, 'По вертикали', [
+        { value: 'top', label: 'сверху' },
+        { value: 'center', label: 'по центру' },
+        { value: 'bottom', label: 'снизу' },
+      ]),
+      c.number(`${base}.logoOffset`, 'Отступ по вертикали, мм', { min: -stripH, max: stripH, step: 1, slider: true }),
+      c.number(`${base}.logoPadRight`, 'Отступ справа, мм', { min: 0, max: 1000, step: 5, slider: true }),
+      c.checkbox(`${base}.logoTint`, 'Свой цвет поверх файла'),
+      c.color(`${base}.logoColor`, 'Цвет'),
+    ];
+  }
+
   private build(): void {
     const c = this.controls;
     const f = this.fonts;
@@ -298,18 +318,10 @@ export class Panel {
       c.number('strips.textOffset', 'Отступ, мм', { min: -stripH, max: stripH, step: 1, slider: true }),
       c.number('strips.padLeft', 'Отступ слева, мм', { min: 0, max: 1000, step: 5, slider: true }),
       Controls.el('div', 'subsection-title', 'Логотип'),
-      c.checkbox('strips.separateLogos', 'Свой у каждой полосы'),
-      this.picker('logo', 'Общий', 'image/*'),
-      this.picker('logoLeft', 'Полоса слева', 'image/*'),
-      this.picker('logoFront', 'Полоса фронт', 'image/*'),
-      c.checkbox('strips.left.logoTint', 'Слева: свой цвет'),
-      c.color('strips.left.logoColor', 'Слева: цвет'),
-      c.checkbox('strips.front.logoTint', 'Фронт: свой цвет'),
-      c.color('strips.front.logoColor', 'Фронт: цвет'),
-      c.number('strips.logoHeight', 'Высота, мм', { min: 10, max: 600, step: 1, slider: true }),
-      c.select('strips.logoAlign', 'По вертикали', align),
-      c.number('strips.logoOffset', 'Отступ, мм', { min: -stripH, max: stripH, step: 1, slider: true }),
-      c.number('strips.padRight', 'Отступ справа, мм', { min: 0, max: 1000, step: 5, slider: true }),
+      c.checkbox('strips.separateLogos', 'Свой файл у каждой полосы'),
+      this.picker('logo', 'Общий файл', 'image/*'),
+      ...this.stripLogo('left', 'Полоса слева', stripH),
+      ...this.stripLogo('front', 'Полоса фронт', stripH),
       Controls.el('div', 'subsection-title', 'Внутренняя сторона'),
       c.checkbox('strips.innerContent', 'Текст и лого'),
       c.color('strips.innerBackground', 'Фон без текста'),

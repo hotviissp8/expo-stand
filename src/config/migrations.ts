@@ -5,6 +5,7 @@ import type { StandConfig } from './types';
 export interface Saved {
   version?: unknown;
   main?: { gradientTo?: unknown };
+  strips?: { logoHeight?: unknown; padRight?: unknown; logoAlign?: unknown; logoOffset?: unknown };
 }
 
 interface Migration {
@@ -38,6 +39,20 @@ const MIGRATIONS: Migration[] = [
       // Линейный переход даёт видимый излом на концах — главная стена переходит на мягкую кривую.
       for (const g of [config.main.gradient, config.main.textGradient]) if (g.curve === 'linear') g.curve = 'soft';
       for (const phrase of config.main.phrases) phrase.justify ??= 'auto';
+    },
+  },
+  {
+    version: 5,
+    apply(config, saved) {
+      for (const phrase of config.main.phrases) phrase.tracking ??= 0;
+      // Логотип настраивается у каждой полосы отдельно: общие значения копируются в обе
+      const old = saved.strips ?? {};
+      for (const strip of [config.strips.left, config.strips.front]) {
+        if (typeof old.logoHeight === 'number') strip.logoHeight = old.logoHeight;
+        if (typeof old.padRight === 'number') strip.logoPadRight = old.padRight;
+        if (old.logoAlign === 'top' || old.logoAlign === 'center' || old.logoAlign === 'bottom') strip.logoAlign = old.logoAlign;
+        if (typeof old.logoOffset === 'number') strip.logoOffset = old.logoOffset;
+      }
     },
   },
 ];

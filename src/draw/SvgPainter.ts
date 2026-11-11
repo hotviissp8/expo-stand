@@ -1,4 +1,4 @@
-import type { DrawList, Paint } from './ops';
+import { letterSpacing, type DrawList, type Paint } from './ops';
 
 const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 const num = (n: number) => +n.toFixed(3);
@@ -36,7 +36,7 @@ export class SvgPainter {
         body.push(`<rect x="${num(op.x)}" y="${num(op.y)}" width="${num(op.w)}" height="${num(op.h)}" fill="${fill(op.fill)}"/>`);
       } else if (op.t === 'text') {
         body.push(
-          `<text x="${num(op.x)}" y="${num(op.y)}" font-family="${esc(op.font.family)}" font-weight="${op.font.weight}"${op.font.italic ? ' font-style="italic"' : ''} font-size="${num(op.font.size)}" fill="${fill(op.fill)}">${esc(op.text)}</text>`,
+          `<text x="${num(op.x)}" y="${num(op.y)}" font-family="${esc(op.font.family)}" font-weight="${op.font.weight}"${op.font.italic ? ' font-style="italic"' : ''}${letterSpacing(op.font) ? ` letter-spacing="${num(letterSpacing(op.font))}"` : ''} font-size="${num(op.font.size)}" fill="${fill(op.fill)}">${esc(op.text)}</text>`,
         );
       } else {
         const href = typeof op.href === 'function' ? op.href() : op.href;

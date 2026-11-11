@@ -1,5 +1,5 @@
 import { Gradient } from '../layout/Gradient';
-import { fontCss, type DrawList, type ImageOp, type Paint } from './ops';
+import { fontCss, letterSpacing, type DrawList, type ImageOp, type Paint } from './ops';
 
 /** Пределы canvas в Chromium. */
 export const CANVAS_MAX_SIDE = 32767;
@@ -37,6 +37,7 @@ export class CanvasPainter {
     };
 
     let currentFont = '';
+    let currentSpacing = 0;
     let currentFill: Paint | null = null;
     for (const op of list.ops) {
       if (op.t === 'rect') {
@@ -52,6 +53,11 @@ export class CanvasPainter {
         if (op.fill !== currentFill) {
           ctx.fillStyle = style(op.fill);
           currentFill = op.fill;
+        }
+        const spacing = letterSpacing(op.font);
+        if (spacing !== currentSpacing) {
+          ctx.letterSpacing = `${spacing}px`;
+          currentSpacing = spacing;
         }
         ctx.fillText(op.text, op.x, op.y);
       } else {
