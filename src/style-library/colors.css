@@ -1,0 +1,165 @@
+/* Design System Color Palette */
+
+:root {
+  /* Primary Color */
+  --color-primary: #d12929;
+  --color-primary-dark: #8C3A2E;
+  --color-primary-light: #C66152;
+  /* Hover of every primary (red-filled) control: the same red, a little lighter,
+     applied to the fill AND the border so nothing stands out. Never opacity. */
+  --color-primary-hover: color-mix(in srgb, var(--color-primary) 86%, var(--color-white));
+
+  /* Shades (Darkening Primary) */
+  --color-shade-1: #9C4134;
+  --color-shade-2: #88392D;
+  --color-shade-3: #753127;
+  --color-shade-4: #612920;
+  --color-shade-5: #4E201A;
+  --color-shade-6: #3A1813;
+  --color-shade-7: #27100D;
+
+  /* Tints (Lightening Primary) */
+  --color-tint-1: #C15444;
+  --color-tint-2: #C86759;
+  --color-tint-3: #CF7A6E;
+  --color-tint-4: #D68E83;
+  --color-tint-5: #DDA198;
+  --color-tint-6: #E4B4AD;
+  --color-tint-7: #EBC7C2;
+
+  /* Complementary Palette */
+  --color-complementary: #3AA0AF;
+  --color-complementary-dark: #2B7A87;
+  --color-complementary-light: #5CBFD4;
+
+  /* Split Palette */
+  --color-split-blue: #3A66AF;
+  --color-split-blue-dark: #2E5290;
+  --color-split-green: #3AAF83;
+  --color-split-teal: #3AA0AF;
+
+  /* Grays - Deep */
+  --color-gray-deep-1: #313131;
+  --color-gray-deep-2: #4A4A4A;
+
+  /* Grays - Mid */
+  --color-gray-mid: #666666;
+  --color-gray-perfect-mid: #666666;
+  --color-gray-mid-2: #808080;
+
+  /* Grays - Light */
+  --color-gray-light: #E3E3E3;
+  --color-gray-light-2: #F0F0F0;
+  --color-gray-light-3: #F5F5F5;
+  --color-gray-light-4: #FAFAFA;
+
+  /* Neutral Colors */
+  --color-white: #FFFFFF;
+  --color-black: #000000;
+
+  /* Semantic Colors */
+  --color-success: #28a745;
+  --color-success-light: #d4edda;
+  --color-success-dark: #218838;
+  --color-success-border: #c3e6cb;
+  --color-success-text: #155724;
+
+  --color-error: #dc3545;
+  --color-error-light: #f8d7da;
+  --color-error-dark: #c82333;
+  --color-error-border: #f5c6cb;
+  --color-error-text: #721c24;
+
+  --color-warning: #ffc107;
+  --color-warning-light: #fff3cd;
+  --color-warning-dark: #e0a800;
+  --color-warning-border: #ffeaa7;
+  --color-warning-text: #856404;
+
+  --color-info: #0066cc;
+  --color-info-light: #d1ecf1;
+  --color-info-dark: #0c5460;
+  --color-info-border: #bee5eb;
+
+  /* Carrier identity (delivery) — one hue per carrier, so a map marker, a
+     legend dot and the chosen pickup point all say whose it is at a glance.
+     Each is that carrier's own brand colour; nothing else on the site uses
+     them, which is what makes them readable as "carrier". */
+  --color-carrier-cdek: #1AB248;
+  --color-carrier-dellin: #F07800;
+
+  /* Chart series — one tone per property on a multi-property chart, in this
+     fixed order (components/ValueChart.tsx). The site's own chart palette, as
+     the interactive property charts draw it: primary, grays and primary tints,
+     alternating dark and light so neighbours never blend. Each series also has
+     its own point shape, so tone is never the only difference. */
+  --color-chart-1: var(--color-primary);
+  --color-chart-2: var(--color-gray-deep-2);
+  --color-chart-3: var(--color-tint-5);
+  --color-chart-4: var(--color-gray-mid-2);
+  --color-chart-5: var(--color-shade-4);
+
+  /* Borders */
+  --color-border: #ddd;
+  --color-border-light: #e9ecef;
+  --color-border-dark: #dee2e6;
+
+  /* Text Colors */
+  --color-text-primary: #333;
+  --color-text-secondary: #999;
+  --color-text-light: #666;
+  --color-text-inverse: #FFFFFF;
+  --color-text-muted: #6c757d;
+
+  /* Background Colors */
+  --color-background-default: #FFFFFF;
+  --color-background-darker: #f5f5f5;
+  --color-background-light: #fafafa;
+  --color-background-secondary: #f9f9f9;
+
+  /* Overlay Colors (semi-transparent, for hero buttons / image overlays) */
+  --color-overlay-dark: rgba(0, 0, 0, 0.3);
+  --color-overlay-light: rgba(0, 0, 0, 0.15);
+  /* The two white overlays' strength on its own, for a shape that is drawn
+     solid white and faded as a group (overlapping parts must not add up). */
+  --opacity-overlay-muted: 0.5;
+  --opacity-overlay-bright: 0.95;
+  --color-overlay-muted: rgba(255, 255, 255, var(--opacity-overlay-muted));
+  --color-overlay-bright: rgba(255, 255, 255, var(--opacity-overlay-bright));
+  --color-overlay-pill: #93939382;
+
+  /* Footer Dark Theme */
+  --color-footer-bg: #1a1a1a;
+  --color-footer-bg-dark: #0f0f0f;
+  --color-footer-text: #b0b0b0;
+  --color-footer-text-muted: #888888;
+  --color-footer-border: #444444;
+  --color-footer-divider: #333333;
+}
+
+/* Override variables for use in components */
+:root {
+  --primary: var(--color-primary);
+  --primary-hover: var(--color-primary-hover);
+  --primary-dark: var(--color-shade-7);
+  --primary-light: var(--color-tint-7);
+
+  --secondary: var(--color-complementary);
+  --secondary-dark: var(--color-split-blue);
+  --secondary-light: var(--color-split-green);
+
+  --success: var(--color-success);
+  --error: var(--color-error);
+  --warning: var(--color-warning);
+  --info: var(--color-info);
+
+  --border-color: var(--color-border);
+  --text-primary: var(--color-text-primary);
+  --text-secondary: var(--color-text-secondary);
+  --text-light: var(--color-text-light);
+  --text-inverse: var(--color-text-inverse);
+
+  --background-default: var(--color-background-default);
+  --background-darker: var(--color-background-darker);
+  --background-light: var(--color-background-light);
+}

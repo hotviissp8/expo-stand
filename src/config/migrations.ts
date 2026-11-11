@@ -1,0 +1,41 @@
+import { createDefaultConfig } from './defaults';
+import type { StandConfig } from './types';
+
+/** Сохранённый конфиг как был, до наложения дефолтов: только поля, нужные миграциям. */
+export interface Saved {
+  version?: unknown;
+  main?: { gradientTo?: unknown };
+}
+
+interface Migration {
+  /** Применяется к сохранённым конфигам с версией ниже этой */
+  version: number;
+  apply(config: StandConfig, saved: Saved): void;
+}
+
+/** Правки сохранённых настроек при смене значений по умолчанию, которые должны дойти до пользователя. */
+const MIGRATIONS: Migration[] = [
+  {
+    version: 3,
+    apply(config, saved) {
+      const d = createDefaultConfig();
+      if (d.materials.length) config.materials = [...d.materials];
+      const m = config.main;
+      m.fontSize = d.main.fontSize;
+      m.boldSize = d.main.boldSize;
+      m.lineHeight = d.main.lineHeight;
+      m.marginTop = d.main.marginTop;
+      m.marginBottom = d.main.marginBottom;
+      m.minGap = d.main.minGap;
+      const oldCorner = saved.main?.gradientTo;
+      if (typeof oldCorner === 'string') config.stand.cornerColor = oldCorner;
+      config.mosaic.scatter.enabled = false;
+    },
+  },
+];
+
+export function migrate(config: StandConfig, saved: Saved): StandConfig {
+  const from = Number(saved.version) || 0;
+  for (const m of MIGRATIONS) if (from < m.version) m.apply(config, saved);
+  return config;
+}
