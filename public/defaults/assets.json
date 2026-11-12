@@ -1,6 +1,6 @@
 {
-  "photo": "photo.jpg",
+  "photo": "photo.webp",
   "logoLeft": "logo-left.svg",
-  "logoFront": "logo-front.svg",
-  "photoLogo": "logo-photo.svg"
+  "logoFront": "logo-full.svg",
+  "photoLogo": "logo-full.svg"
 }

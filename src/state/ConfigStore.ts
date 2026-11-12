@@ -2,6 +2,7 @@ import { STORAGE_KEY, createDefaultConfig } from '../config/defaults';
 import { mergeConfig } from '../config/merge';
 import { migrate, type Saved } from '../config/migrations';
 import type { ConfigSection, StandConfig } from '../config/types';
+import { DefaultsReset } from './DefaultsReset';
 
 export interface ConfigChange {
   /** Путь вида "main.fontSize"; "*" — заменён весь конфиг. */
@@ -75,6 +76,10 @@ export class ConfigStore {
   private static load(): StandConfig {
     const defaults = createDefaultConfig();
     try {
+      if (DefaultsReset.required) {
+        localStorage.removeItem(STORAGE_KEY);
+        return defaults;
+      }
       const raw = localStorage.getItem(STORAGE_KEY);
       if (!raw) return defaults;
       return ConfigStore.upgrade(JSON.parse(raw));

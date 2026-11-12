@@ -11,7 +11,7 @@
     "stripThickness": 40,
     "cornerPost": false,
     "postSize": 50,
-    "cornerColor": "#ffffff"
+    "cornerColor": "#fafafa"
   },
   "font": {
     "family": "Century Gothic"
@@ -70,19 +70,19 @@
     "phraseFlow": "fixed",
     "gradient": {
       "start": 3500,
-      "end": 4600,
+      "end": 4800,
       "curve": "soft",
-      "power": 1.15
+      "power": 1
     },
-    "textGradientLinked": false,
+    "textGradientLinked": true,
     "textGradient": {
-      "start": 3500,
+      "start": 3000,
       "end": 4500,
       "curve": "soft",
       "power": 1
     },
     "textInverse": "#fafafa",
-    "dotInverse": "#ffffff",
+    "dotInverse": "#fafafa",
     "phrases": [
       {
         "id": "p1",
@@ -186,8 +186,8 @@
     "shuffle": true,
     "seed": 3,
     "zoom": 1.2,
-    "offsetX": 13,
-    "offsetY": 8,
+    "offsetX": 18,
+    "offsetY": 0,
     "brightness": 0,
     "contrast": 0,
     "saturation": 0,
@@ -195,16 +195,16 @@
     "underlay": 0,
     "fade": {
       "enabled": true,
-      "start": 0,
-      "end": 1300,
-      "curve": "smooth",
+      "start": 200,
+      "end": 2000,
+      "curve": "linear",
       "power": 1.6
     },
     "pixels": {
       "enabled": true,
-      "start": 1000,
-      "end": 2000,
-      "curve": "smooth",
+      "start": 1500,
+      "end": 2200,
+      "curve": "linear",
       "power": 1.6
     },
     "pixelSize": 0,
@@ -232,10 +232,10 @@
       "seed": 11
     },
     "overlay": {
-      "enabled": true,
-      "x": 1500,
-      "y": 1250,
-      "height": 400,
+      "enabled": false,
+      "x": 1550,
+      "y": 300,
+      "height": 200,
       "tint": false,
       "color": "#ffffff",
       "opacity": 1
@@ -251,32 +251,32 @@
     "fontSize": 110,
     "padLeft": 120,
     "textAlign": "center",
-    "textOffset": 0,
+    "textOffset": 1,
     "separateLogos": true,
     "innerContent": false,
     "innerBackground": "#2f3133",
     "left": {
       "text": "Технические пластики, которые работают",
-      "logoHeight": 150,
-      "logoPadRight": 120,
+      "logoHeight": 180,
+      "logoPadRight": 150,
       "logoAlign": "center",
-      "logoOffset": -22,
-      "logoTint": false,
+      "logoOffset": 0,
+      "logoTint": true,
       "logoColor": "#ffffff"
     },
     "front": {
       "text": "Российское производство высокотехнологичных пластмасс",
-      "logoHeight": 150,
-      "logoPadRight": 120,
+      "logoHeight": 180,
+      "logoPadRight": 150,
       "logoAlign": "center",
-      "logoOffset": -22,
-      "logoTint": false,
+      "logoOffset": 0,
+      "logoTint": true,
       "logoColor": "#ffffff"
     }
   },
   "view": {
     "pxPerMm": 2,
-    "exportPxPerMm": 4,
+    "exportPxPerMm": 2,
     "background": "#e4e6e8",
     "groundColor": "#d4d6d8",
     "lit": false,

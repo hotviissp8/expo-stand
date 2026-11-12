@@ -19,6 +19,12 @@ export const WEIGHT_NAMES: Record<number, string> = {
 
 export const STORAGE_KEY = 'expo-stand.config';
 export const PANEL_MODE_KEY = 'expo-stand.panelMode';
+/**
+ * Ревизия значений по умолчанию (preset.json + файлы в public/defaults). Меняется только когда нужно
+ * сбросить у ВСЕХ посетителей сохранённые настройки и файлы к дефолтам: увеличить число на 1.
+ */
+export const DEFAULTS_REVISION = 1;
+export const DEFAULTS_REV_KEY = 'expo-stand.defaultsRev';
 export const ASSET_DB = 'expo-stand';
 
 /** Настройки логотипа одной полосы */

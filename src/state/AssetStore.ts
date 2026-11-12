@@ -1,4 +1,5 @@
 import { Db } from './Db';
+import { DefaultsReset } from './DefaultsReset';
 import { PublicFiles } from './PublicFiles';
 
 export type AssetKey = 'photo' | 'logo' | 'logoLeft' | 'logoFront' | 'photoLogo';
@@ -46,10 +47,12 @@ export class AssetStore {
 
   async restore(): Promise<void> {
     const manifest = await PublicFiles.json<Partial<Record<AssetKey, string>>>(DEFAULTS_MANIFEST);
+    if (DefaultsReset.required) await Promise.all(ASSET_KEYS.map((key) => Db.delete('assets', key)));
     for (const key of ASSET_KEYS) {
       const stored = (await Db.get<StoredAsset>('assets', key)) ?? (await AssetStore.fallback(manifest?.[key]));
       if (stored) await this.apply(key, stored).catch((e) => console.error(key, e));
     }
+    DefaultsReset.commit();
   }
 
   async put(key: AssetKey, file: File): Promise<void> {
